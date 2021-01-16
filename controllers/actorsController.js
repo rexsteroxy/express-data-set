@@ -23,7 +23,7 @@ exports.actorSignUp = catchAsync(async (req, res, next) => {
   let newActor = await db.Actor.create({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password),
-    photo_url: req.body.photo_url,
+    avatar_url: req.body.avatar_url,
   });
   if (newActor) {
     const token = signToken(newActor.id);
@@ -158,8 +158,7 @@ if (newEvent) {
   await newEvent.createRepo({
     id:req.body.repo.id,
     name: req.body.repo.name, 
-    repo_url: req.body.repo.repo_url,
-    actorId: actor.id
+    url: req.body.repo.url
   });
 
 
@@ -179,19 +178,59 @@ if (newEvent) {
 
  
 
-  
-  // const actor = await db.Actor.findAll();
-  // if (actor) {
-  //   res.status(200).json({
-  //     status: 'success',
-  //     requestedAt: req.requestTime,
-  //     data: actor,
-  //   });
-  // } else {
-  //   res.status(401).json({
-  //     status: 'Not Found',
-  //     message: 'No actor found',
-  //     requestedAt: req.requestTime,
-  //   });
-  // }
+ 
 });
+
+
+exports.getAllEvents = catchAsync(async (req, res, next) => {
+
+  const event = await db.Event.findAll({include: [db.Actor, db.Repo]});
+  if (event) {
+    res.status(200).json({
+      length: event.length,
+      status: 'success',
+      requestedAt: req.requestTime,
+      data: event,
+    });
+  } else {
+    res.status(401).json({
+      status: 'Not Found',
+      message: 'No event found',
+      requestedAt: req.requestTime,
+    });
+  }
+  
+   
+  
+    
+  });
+
+
+
+  exports.deleteAllEvents = catchAsync(async (req, res, next) => {
+
+
+    const result = await db.Event.findAll();
+
+    if (result) {
+      const event = await db.Event.destroy({
+        where: {},
+        truncate: true
+      });
+      if (event) {
+        res.status(200).json({
+          status: 'success',
+          requestedAt: req.requestTime,
+        });
+      } 
+    }
+
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      message:"nothing to delete"
+    });
+     
+    
+      
+    });

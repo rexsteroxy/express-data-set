@@ -11,13 +11,10 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      repo_url: {
+      url: {
         type: Sequelize.STRING
       },
       eventId: {
-        type: Sequelize.INTEGER
-      },
-      actorId: {
         type: Sequelize.INTEGER
       },
       createdAt: {

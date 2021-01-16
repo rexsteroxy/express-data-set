@@ -16,9 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   Repo.init({
     name: DataTypes.STRING,
-    repo_url: DataTypes.STRING,
-    eventId: DataTypes.INTEGER,
-    actorId: DataTypes.INTEGER
+    url: DataTypes.STRING,
+    eventId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Repo',
