@@ -42,6 +42,10 @@ exports.actorSignUp = catchAsync(async (req, res, next) => {
   }
 });
 
+
+
+
+
 exports.actorLogin = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -136,4 +140,58 @@ exports.getAllActors = catchAsync(async (req, res, next) => {
       requestedAt: req.requestTime,
     });
   }
+});
+
+
+
+//function to get all actors
+exports.createEvent = catchAsync(async (req, res, next) => {
+
+let actor = req.actor;
+
+ const newEvent = await actor.createEvent({
+  id: req.body.id,
+  type: req.body.type,
+});
+
+if (newEvent) {
+  await newEvent.createRepo({
+    id:req.body.repo.id,
+    name: req.body.repo.name, 
+    repo_url: req.body.repo.repo_url,
+    actorId: actor.id
+  });
+
+
+  res.status(201).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    data: newEvent,
+  });
+}else{
+
+
+  res.status(400).json({
+    status: 'Event Id already exists',
+    
+  });
+}
+
+ 
+
+  
+  // const actor = await db.Actor.findAll();
+  // if (actor) {
+  //   res.status(200).json({
+  //     status: 'success',
+  //     requestedAt: req.requestTime,
+  //     data: actor,
+  //   });
+  // } else {
+  //   res.status(401).json({
+  //     status: 'Not Found',
+  //     message: 'No actor found',
+  //     requestedAt: req.requestTime,
+  //   });
+  // }
 });
