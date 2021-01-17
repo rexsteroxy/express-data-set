@@ -203,7 +203,7 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
       {
         model: db.Actor,
         attributes: {
-          exclude: ['createdAt', 'updatedAt'],
+          exclude: ['createdAt', 'updatedAt','password'],
         },
       },
       {
@@ -279,7 +279,7 @@ exports.getEventsByItsActor = catchAsync(async (req, res, next) => {
         {
           model: db.Actor,
           attributes: {
-            exclude: ['createdAt', 'updatedAt'],
+            exclude: ['createdAt', 'updatedAt','password'],
           },
         },
         {
